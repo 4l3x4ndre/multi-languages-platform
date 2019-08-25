@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="beginstyle.css">
+    <!----script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script-->
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <form id="form" onsubmit="return false">
+        <input id="status" readonly value="Sign in">
+        <input id="input_name" type="text" size="30" placeholder="Username">
+        <input id="input_pw" type="password" size="30" placeholder="****">
+        <input id="submit" type="submit" value="Submit" onclick="submit_form();">
+        <button id="disconnect" onclick="disconnect_from_server();">
+            Disconnect
+          </button>
+    </form>
+    <script src="./index.js"></script>
+    <script type="text/javascript">
+        const disconnect_button = document.querySelector("#disconnect")
+        disconnect_button.style.display = 'none'
+
+        const status = document.querySelector('#status')
+        let user = {
+            name: '',
+            pw: ''
+        }
+
+        function disconnect_from_server() {
+            disconnect()
+        }
+
+        function submit_form() {
+            user.name = document.querySelector('#input_name').value
+            user.pw = document.querySelector('#input_pw').value
+            
+            if (user.name === '') {
+                status.value = 'Please enter a username'
+            } else if (user.pw === '') {
+                status.value = 'Please enter a password'
+            } else {
+                connect_to_server()
+            }
+        }
+    </script>
+</body>
+
+</html>
