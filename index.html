@@ -10,24 +10,59 @@
 </head>
 
 <body>
-    <form id="form" onsubmit="return false">
-        <input id="status" readonly value="Sign in">
-        <input id="input_name" type="text" size="30" placeholder="Username">
-        <input id="input_pw" type="password" size="30" placeholder="****">
-        <input id="submit" type="submit" value="Submit" onclick="submit_form();">
-        <button id="disconnect" onclick="disconnect_from_server();">
-            Disconnect
-          </button>
-    </form>
+    <div id="login_page">
+        <form id="form" onsubmit="return false">
+            <input id="status" readonly value="Sign in">
+            <input id="input_name" type="text" size="30" placeholder="Username">
+            <input id="input_pw" type="password" size="30" placeholder="****">
+            <input id="submit" type="submit" value="Submit" onclick="submit_form();">
+            <button id="disconnect" onclick="disconnect_from_server();">
+                Disconnect
+            </button>
+            <button id="enter" onclick="enter_inside();">
+                    GO
+            </button>
+        </form>
+    </div>
+    <div id="inside_page">
+        <canvas id="canvas" width="500px" height="500px"></canvas>
+    </div>
+    <!--div id="inside_page">
+            <ul id="messages"></ul>
+            <form id="m_form"  onsubmit="return false">
+                <input onsubmit="return false" id="m" autocomplete="off" />
+                <button type="button" onclick="send_m();">Send</button>
+            </form>
+    </div-->
     <script src="./index.js"></script>
+    <script src="./message.js"></script>
+    <script src="./player.js"></script>
+    <script src="./inputs.js"></script>
+    <script src="./designer.js"></script>
+    <script src="./game.js"></script>
     <script type="text/javascript">
+        const login_page = document.querySelector('#login_page')
+        const inside_page = document.querySelector('#inside_page')
+        const submit_button = document.querySelector('#submit')
+        const enter_button = document.querySelector('#enter')
         const disconnect_button = document.querySelector("#disconnect")
-        disconnect_button.style.display = 'none'
 
+        document.querySelector('#login_page').style.display = 'block'
+        submit_button.style.display = 'block'
+        //inside_page.style.display = 'none'
+        enter_button.style.display = 'none'
+        disconnect_button.style.display = 'none'
+        
         const status = document.querySelector('#status')
         let user = {
             name: '',
             pw: ''
+        }
+
+        function enter_inside() {
+            login_page.style.display = 'none'
+            inside_page.style.display = 'block'
+            get_user()
         }
 
         function disconnect_from_server() {
@@ -45,6 +80,10 @@
             } else {
                 connect_to_server()
             }
+        }
+
+        function send_m() {
+            message_senter(document.querySelector('#m').value)
         }
     </script>
 </body>

@@ -6,17 +6,56 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
 const fetch = require('node-fetch')
+const redis = require('./redis')
+const PORT = process.env.PORT || 9000
+
+const clients = []
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'game_js')))
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html')
 })
 
-const redis = require('./redis')
 
-const PORT = process.env.PORT || 9000
+io.on('connection', function(socket) {
+    socket.on('chat message', function(user, msg) {
+        console.log(user)
+        io.emit('chat message', user, msg)
+    })
+    
+    socket.on('store client info', function(data) {
+        let client_info = new Object()
+        client_info.id = data.id
+        client_info.client_id = socket.id
+        client_info.user = data.user
+        client_info.pos = data.pos
+        clients.push(client_info)
+        console.log('GOT DATA, NOW:', clients)
+    })
 
+    socket.on('get users', function() {
+        io.emit('received clients', clients)
+    })
+
+    socket.on('move', function(data) {
+        socket.broadcast.emit('new pos', data)
+    })
+
+    socket.on ('disconnect', function (data) {
+        console.log('RECEIVED')
+        for (var i=0; i<clients.length; i++) {
+            let c = clients[i]
+            if (c.client_id === socket.id) {
+                console.log('SENT')
+                socket.broadcast.emit('client left', c.id)
+                clients.splice(i, 1)
+                break
+            }
+        }
+    })
+})
 
 async function verifyUser(token) {
     console.log('verify', token)
@@ -40,7 +79,7 @@ async function verifyUser(token) {
         .then(res => res.json())
         .then(json => {
             // savoir ce qu'envoie le php
-            console.log("*************php sent:", json.result)
+            console.log("*************php sent:", json)
             
             // Si on a un user, on le return, sinon on return un erreur
             if (json.result === 'got user') {
@@ -48,6 +87,7 @@ async function verifyUser(token) {
             } else {
                 return reject('USER_NOT_FOUND')
             }
+
             return resolve(user)
         })
 
@@ -65,7 +105,7 @@ socketAuth(io, {
                 .setAsync(`users:${user.id}`, socket.id, 'NX', 'EX', 30)
 
             if (!canConnect) {
-                return callback({ message: 'ALREADY_LOGGED_IN' })
+                //return callback({ message: 'ALREADY_LOGGED_IN' })
             }
 
             socket.user = user
@@ -79,6 +119,8 @@ socketAuth(io, {
     },
     postAuthenticate: async(socket) => {
         console.log(`Socket ${socket.id} authenticated.`)
+
+        socket.emit('is validated')
 
         socket.conn.on('packet', async(packet) => {
             if (socket.auth && packet.type === 'ping') {
@@ -94,6 +136,8 @@ socketAuth(io, {
         }
     },
 })
+
+
 
 server.listen(PORT, function() {
     console.log('listening on *:' + PORT)

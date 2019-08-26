@@ -14,7 +14,21 @@ socket.on('connect', () => {
         name: user.name,
         pw: user.pw
     })
+    /*setTimeout(() => {
+        if (status.value = "Connected") {
+            enter_button.style.display = 'block'
+        } else {
+            submit_button.style.display = 'block'
+            disconnect_button.style.display = 'none'
+            enter_button.style.display = 'none'
+        }
+    }, 1500);*/
+})
+
+socket.on('is validated', function () {
     disconnect_button.style.display = 'block'
+    enter_button.style.display = 'block'
+    submit_button.style.display = 'none'
 })
 
 socket.on('unauthorized', (reason) => {
@@ -29,6 +43,8 @@ socket.on('unauthorized', (reason) => {
 
     socket.disconnect()
     disconnect_button.style.display = 'none'
+    enter_button.style.display = 'none'
+    submit_button.style.display = 'block'
 })
 
 socket.on('disconnect', (reason) => {
@@ -47,4 +63,6 @@ const disconnect = () => {
     socket.disconnect()
     status.value = "You are disconnected"
     disconnect_button.style.display = 'none'
+    enter_button.style.display = 'none'
+    submit_button.style.display = 'block'
 }
