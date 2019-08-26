@@ -40,7 +40,7 @@ async function verifyUser(token) {
         .then(res => res.json())
         .then(json => {
             // savoir ce qu'envoie le php
-            console.log("*************php sent:", json)
+            console.log("*************php sent:", json.result)
             
             // Si on a un user, on le return, sinon on return un erreur
             if (json.result === 'got user') {
@@ -48,9 +48,9 @@ async function verifyUser(token) {
             } else {
                 return reject('USER_NOT_FOUND')
             }
+            return resolve(user)
         })
 
-        return resolve(user)
     })
 }
 
