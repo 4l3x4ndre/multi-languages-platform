@@ -4,7 +4,7 @@ document.addEventListener("keydown", inputs.keyDown.bind(inputs), false)
 document.addEventListener("keyup", inputs.keyUp.bind(inputs), false)
 
 let x = Math.random() * designer.canvas.width
-let y = Math.random()* designer.canvas.height
+let y = Math.random() * designer.canvas.height
 let players = []
 
 function get_user() {
@@ -19,7 +19,7 @@ function get_user() {
 }
 
 function load_other_player() {
-    socket.emit('get users')
+    socket.emit('get users',socket.id, user.room)
 }
 
 socket.on('received clients', function(data) {

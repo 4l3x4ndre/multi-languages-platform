@@ -10,6 +10,8 @@ const redis = require('./redis')
 const PORT = process.env.PORT || 9000
 
 const clients = []
+const rooms = []
+rooms.push({name: "room 1", clients:  []})
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'game_js')))
@@ -31,16 +33,33 @@ io.on('connection', function(socket) {
         client_info.client_id = socket.id
         client_info.user = data.user
         client_info.pos = data.pos
-        clients.push(client_info)
+        socket.my_data = client_info
+        clients.push(socket.my_data)
         console.log('GOT DATA, NOW:', clients)
     })
 
-    socket.on('get users', function() {
-        io.emit('received clients', clients)
+    socket.on('get users', function(user_id, room_name) {
+        let room = io.sockets.adapter.rooms[room_name].sockets
+        console.log("ROOOOOOM", room)
+        let users = []
+        for (var client_id in room) {
+            let user = io.sockets.connected[client_id].my_data
+            users.push(user)
+        }
+        console.log("USERS", users)
+        io.emit('received clients', users)
     })
 
     socket.on('move', function(data) {
         socket.broadcast.emit('new pos', data)
+    })
+
+    socket.on('rooms', function(data) {
+        io.to(socket.id).emit('rooms', rooms)
+    }) 
+
+    socket.on('join room', function (room_name) {
+        socket.join(room_name)
     })
 
     socket.on ('disconnect', function (data) {

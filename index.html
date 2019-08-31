@@ -5,7 +5,6 @@
     <title>Socket.IO chat</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="beginstyle.css">
-    <!----script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script-->
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
@@ -15,14 +14,119 @@
             <input id="status" readonly value="Sign in">
             <input id="input_name" type="text" size="30" placeholder="Username">
             <input id="input_pw" type="password" size="30" placeholder="****">
-            <input id="submit" type="submit" value="Submit" onclick="submit_form();">
+            <input id="submit" type="submit" value="Connect" onclick="submit_form();">
+            <button id="go_to_register" onclick="show_page(1);">
+                Sign up
+            </button>
             <button id="disconnect" onclick="disconnect_from_server();">
                 Disconnect
             </button>
-            <button id="enter" onclick="enter_inside();">
+            <button id="enter" onclick="show_page(2);">
                     GO
             </button>
         </form>
+    </div>
+    <div id="register_page">
+        <form id="form" onsubmit="return false">
+            <input id="register_status" readonly value="Sign up">
+            <input id="register_input_name" type="text" size="30" placeholder="Username">
+            <input id="register_input_pw1" type="password" size="30" placeholder="Password">
+            <input id="register_input_pw2" type="password" size="30" placeholder="Confirm password">
+            <input id="register_submit" type="submit" value="Validate" onclick="register_to_db();">
+            <input id="go_to_login" type="submit" value="Sign in" onclick="show_page(0);">
+        </form>
+    </div>
+
+    <svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+        viewBox="0 0 600 100">
+        <defs>
+
+            <filter id="filter">
+                <feFlood flood-color="black" result="black" />
+                <feFlood flood-color="red" result="flood1" />
+                <feFlood flood-color="limegreen" result="flood2" />
+                <feOffset in="SourceGraphic" dx="3" dy="0" result="off1a"/>
+                <feOffset in="SourceGraphic" dx="2" dy="0" result="off1b"/>
+                <feOffset in="SourceGraphic" dx="-3" dy="0" result="off2a"/>
+                <feOffset in="SourceGraphic" dx="-2" dy="0" result="off2b"/>
+                <feComposite in="flood1" in2="off1a" operator="in"  result="comp1" />
+                <feComposite in="flood2" in2="off2a" operator="in" result="comp2" />
+
+                <feMerge x="0" width="100%" result="merge1">
+                    <feMergeNode in = "black" />
+                    <feMergeNode in = "comp1" />
+                    <feMergeNode in = "off1b" />
+
+                    <animate 
+                        attributeName="y" 
+                        id = "y"
+                        dur ="4s"
+                        
+                        values = '104px; 104px; 30px; 105px; 30px; 2px; 2px; 50px; 40px; 105px; 105px; 20px; 6ßpx; 40px; 104px; 40px; 70px; 10px; 30px; 104px; 102px'
+
+                        keyTimes = '0; 0.362; 0.368; 0.421; 0.440; 0.477; 0.518; 0.564; 0.593; 0.613; 0.644; 0.693; 0.721; 0.736; 0.772; 0.818; 0.844; 0.894; 0.925; 0.939; 1'
+
+                        repeatCount = "indefinite" />
+    
+                    <animate attributeName="height" 
+                        id = "h" 
+                        dur ="4s"
+                        
+                        values = '10px; 0px; 10px; 30px; 50px; 0px; 10px; 0px; 0px; 0px; 10px; 50px; 40px; 0px; 0px; 0px; 40px; 30px; 10px; 0px; 50px'
+
+                        keyTimes = '0; 0.362; 0.368; 0.421; 0.440; 0.477; 0.518; 0.564; 0.593; 0.613; 0.644; 0.693; 0.721; 0.736; 0.772; 0.818; 0.844; 0.894; 0.925; 0.939; 1'
+
+                        repeatCount = "indefinite" />
+                </feMerge>
+                
+
+                <feMerge x="0" width="100%" y="60px" height="65px" result="merge2">
+                    <feMergeNode in = "black" />
+                    <feMergeNode in = "comp2" />
+                    <feMergeNode in = "off2b" />
+
+                    <animate attributeName="y" 
+                        id = "y"
+                        dur ="4s"
+                        values = '103px; 104px; 69px; 53px; 42px; 104px; 78px; 89px; 96px; 100px; 67px; 50px; 96px; 66px; 88px; 42px; 13px; 100px; 100px; 104px;' 
+
+                        keyTimes = '0; 0.055; 0.100; 0.125; 0.159; 0.182; 0.202; 0.236; 0.268; 0.326; 0.357; 0.400; 0.408; 0.461; 0.493; 0.513; 0.548; 0.577; 0.613; 1'
+
+                        repeatCount = "indefinite" />
+    
+                    <animate attributeName="height" 
+                        id = "h"
+                        dur = "4s"
+                        
+                        values = '0px; 0px; 0px; 16px; 16px; 12px; 12px; 0px; 0px; 5px; 10px; 22px; 33px; 11px; 0px; 0px; 10px'
+
+                        keyTimes = '0; 0.055; 0.100; 0.125; 0.159; 0.182; 0.202; 0.236; 0.268; 0.326; 0.357; 0.400; 0.408; 0.461; 0.493; 0.513;  1'
+                        
+                        repeatCount = "indefinite" />
+                </feMerge>
+                
+                <feMerge>
+                    <feMergeNode in="SourceGraphic" />	
+
+                    <feMergeNode in="merge1" /> 
+                <feMergeNode in="merge2" />
+
+                </feMerge>
+            </filter>
+
+        </defs>
+
+        <g>
+            <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle">GAME</text>
+        </g>
+    </svg>
+
+    <div id="rooms_page">
+        <div id="rooms_display">
+            <p id="rooms_title">Rooms:</p>
+            <ul id="rooms">
+            </ul>
+        </div>
     </div>
     <div id="inside_page">
         <canvas id="canvas" width="500px" height="500px"></canvas>
@@ -42,21 +146,34 @@
     <script src="./game.js"></script>
     <script type="text/javascript">
         const login_page = document.querySelector('#login_page')
+        const register_page = document.querySelector('#register_page')
         const inside_page = document.querySelector('#inside_page')
         const submit_button = document.querySelector('#submit')
         const enter_button = document.querySelector('#enter')
         const disconnect_button = document.querySelector("#disconnect")
+        const status = document.querySelector('#status')
+        const register_status = document.querySelector('#register_status')
+        const go_to_login = document.querySelector('#go_to_login')
+        const register_submit = document.querySelector('#register_submit')
+        const login_name = document.querySelector('#input_name')
+        const login_pw = document.querySelector('#input_pw')
+        const register_name = document.querySelector('#register_input_name')
 
-        document.querySelector('#login_page').style.display = 'block'
+        login_page.style.display = 'block'
+        register_page.style.display = 'none'
         submit_button.style.display = 'block'
-        //inside_page.style.display = 'none'
+        inside_page.style.display = 'none'
         enter_button.style.display = 'none'
         disconnect_button.style.display = 'none'
-        
-        const status = document.querySelector('#status')
+        register_submit.style.display = 'block'
+        status.value = "Sign in"
+        register_status.value = "Sign up"
+        register_name.value = ""
+
         let user = {
             name: '',
-            pw: ''
+            pw: '',
+            room: ''
         }
 
         function enter_inside() {
@@ -66,12 +183,14 @@
         }
 
         function disconnect_from_server() {
+            login_name.value = ""
+            login_pw.value = ""
             disconnect()
         }
 
         function submit_form() {
-            user.name = document.querySelector('#input_name').value
-            user.pw = document.querySelector('#input_pw').value
+            user.name = login_name.value
+            user.pw = login_pw.value
             
             if (user.name === '') {
                 status.value = 'Please enter a username'
@@ -82,9 +201,89 @@
             }
         }
 
-        function send_m() {
-            message_senter(document.querySelector('#m').value)
+        function show_page(page_id) {
+            if (page_id === 1) {
+                login_page.style.display = 'none'
+                register_page.style.display = 'block'
+            } else if (page_id === 0) {
+                login_page.style.display = 'block'
+                register_page.style.display = 'none'
+                document.location.reload();
+            } else if (page_id === 2) {
+                socket.emit('rooms')
+            }
         }
+
+        function register_to_db() {
+            let name = register_name.value
+            let pw1 = document.querySelector('#register_input_pw1').value
+            let pw2 = document.querySelector('#register_input_pw2').value
+
+            if (name === "") {
+                register_status.value = "Please enter a username"
+                return 
+            }
+
+            if (pw1 === "" || pw2 === "") {
+                register_status.value = "Please complete all fields"
+                return
+            }
+
+            if (pw1 !== pw2) {
+                register_status.value = "Incorrect passwords"
+                return
+            }
+
+            let body = {name: name, pw: pw1}
+            fetch('http://test.lan/authentication/PHP/register.php',
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                body: JSON.stringify(body)
+            })
+            .then(res => res.json())
+            .then(json => {
+                register_status.value = json.result
+                console.log(json.detail)
+                if (json.detail === 'good') {
+                    register_submit.style.display = 'none'
+                }
+            })
+            }
+            
+            function show_rooms() {
+                socket.emit('rooms')
+                console.log('sent')
+            }
+            socket.on('rooms', function(data) {
+                console.log(data.length)
+                if (data.length > 0) {
+                    for (var i in data) {
+                        const d = data[i]
+                        let li = document.createElement("LI")
+                        let text = document.createTextNode(d.name)
+                        li.append(text);
+                        li.setAttribute('id', "room_li")
+                        li.onclick = function() { my_click(this) };
+                        document.querySelector('#rooms').append(li)
+                    }
+                } else {
+                    let li = document.createElement("LI")
+                    let text = document.createTextNode("There is no room")
+                    li.append(text);
+                    document.querySelector('#rooms').append(li)
+                }
+            })
+
+            function my_click(el) {
+                socket.emit('join room', el.innerHTML)
+                user.room = el.innerHTML
+                enter_inside();
+                console.log("joining room", el.innerHTML)
+            }
     </script>
 </body>
 
