@@ -25,12 +25,22 @@ $mysqli = mysqli_connect("localhost", "alexandre", "thor", "labase");
 
 
 // On recherche un user avec un login & pw reçus dans l'input
-$sql_name= "SELECT * FROM users WHERE login = '".$decoded['name']."' AND pw = '".$decoded['pw']."';";
-$result = $mysqli->query($sql_name);
+//$sql_name= "SELECT * FROM users WHERE login = '".$decoded['name']."' AND pw = '".$decoded['pw']."';";
+//$result = $mysqli->query($sql_name);
+$stmt = $mysqli->prepare("SELECT * FROM users WHERE login =? AND pw =?");
+$stmt->bind_param("ss", $user, $pw);
+
+$user = $decoded['name'];
+$pw = $decoded['pw'];
+
+$stmt->execute();
+
+$stmt->store_result();
+
 
 // en fonction du result de la requête mySql, on renvoit:
-if ($result->num_rows === 1) {
+if ($stmt->num_rows === 1) {
     echo '{"result": "got user"}';
 } else {
-    echo '{"result": "none"}';
+    echo '{"result": "none", "number":'.$stmt->num_rows.'}';
 }
