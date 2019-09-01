@@ -19,7 +19,7 @@ function get_user() {
 }
 
 function load_other_player() {
-    socket.emit('get users',socket.id, user.room)
+    socket.emit('get users', user.room)
 }
 
 socket.on('received clients', function(data) {

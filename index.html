@@ -127,6 +127,11 @@
             <ul id="rooms">
             </ul>
         </div>
+        <div id="rooms_creation">
+            <p id="rooms_title">Create a room:</p>
+            <input id="room_name" type="text" placeholder = "Room name">
+            <input  type="submit" value="Create" onclick="create_room()">
+        </div>
     </div>
     <div id="inside_page">
         <canvas id="canvas" width="500px" height="500px"></canvas>
@@ -158,6 +163,7 @@
         const login_name = document.querySelector('#input_name')
         const login_pw = document.querySelector('#input_pw')
         const register_name = document.querySelector('#register_input_name')
+        const room_field = document.querySelector('#room_name')
 
         login_page.style.display = 'block'
         register_page.style.display = 'none'
@@ -169,6 +175,7 @@
         status.value = "Sign in"
         register_status.value = "Sign up"
         register_name.value = ""
+        room_field.value = ""
 
         let user = {
             name: '',
@@ -252,38 +259,50 @@
                     register_submit.style.display = 'none'
                 }
             })
-            }
+        }
             
-            function show_rooms() {
-                socket.emit('rooms')
-                console.log('sent')
+        function show_rooms() {
+            socket.emit('rooms')
+        }
+        socket.on('rooms', function(data) {
+            console.log(data)
+            const obj = document.querySelector("#rooms");
+            while (obj.firstChild) {
+                obj.removeChild(obj.firstChild);
             }
-            socket.on('rooms', function(data) {
-                console.log(data.length)
-                if (data.length > 0) {
-                    for (var i in data) {
-                        const d = data[i]
-                        let li = document.createElement("LI")
-                        let text = document.createTextNode(d.name)
-                        li.append(text);
-                        li.setAttribute('id', "room_li")
-                        li.onclick = function() { my_click(this) };
-                        document.querySelector('#rooms').append(li)
-                    }
-                } else {
+            if (data.length > 0 && data[0] !== null) {
+                for (var i in data) {
+                    const d = data[i]
+                    console.log(d)
                     let li = document.createElement("LI")
-                    let text = document.createTextNode("There is no room")
+                    let text = document.createTextNode(d)
                     li.append(text);
+                    li.setAttribute('id', "room_li")
+                    li.onclick = function() { click_li(this) };
                     document.querySelector('#rooms').append(li)
                 }
-            })
-
-            function my_click(el) {
-                socket.emit('join room', el.innerHTML)
-                user.room = el.innerHTML
-                enter_inside();
-                console.log("joining room", el.innerHTML)
+            } else {
+                let li = document.createElement("P")
+                let text = document.createTextNode("There is no room")
+                li.append(text);
+                document.querySelector('#rooms').append(li)
             }
+        })
+
+        function click_li(el) {
+            socket.emit('join room', el.innerHTML)
+            user.room = el.innerHTML
+            enter_inside();
+            console.log("joining room", el.innerHTML)
+        }
+
+        function create_room() {
+            let room_name = room_field.value
+            console.log("sending '" + room_name + "' as room")
+            socket.emit('create room', room_name)
+            user.room = room_name
+            enter_inside();
+        }
     </script>
 </body>
 

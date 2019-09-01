@@ -10,8 +10,6 @@ const redis = require('./redis')
 const PORT = process.env.PORT || 9000
 
 const clients = []
-const rooms = []
-rooms.push({name: "room 1", clients:  []})
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'game_js')))
@@ -38,7 +36,7 @@ io.on('connection', function(socket) {
         console.log('GOT DATA, NOW:', clients)
     })
 
-    socket.on('get users', function(user_id, room_name) {
+    socket.on('get users', function(room_name) {
         let room = io.sockets.adapter.rooms[room_name].sockets
         console.log("ROOOOOOM", room)
         let users = []
@@ -55,11 +53,36 @@ io.on('connection', function(socket) {
     })
 
     socket.on('rooms', function(data) {
+        let rooms = []
+        for (var i in io.sockets.adapter.rooms) {
+            //io.sockets.adapter.rooms[i].name = "YI"
+            //console.log("NUMBER", i, io.sockets.adapter.rooms[i])
+            let is_not_a_room = false
+            for (let c in io.sockets.connected) {
+                if (i == c) {
+                    is_not_a_room = true
+                    break
+                }
+            }
+            if (!is_not_a_room) {
+                rooms.push(i)
+            }
+        }
         io.to(socket.id).emit('rooms', rooms)
     }) 
 
     socket.on('join room', function (room_name) {
         socket.join(room_name)
+    })
+
+    socket.on('create room', function (room_name) {
+        socket.join(room_name)
+        console.log("ROOM NOW", io.sockets.adapter.rooms)
+        /*setTimeout(() => {
+            console.log("SIZE", io.sockets.adapter.rooms.length)
+            io.sockets.adapter.rooms[io.sockets.adapter.rooms.length-1].name = room_name
+            console.log("Create", io.sockets.adapter.rooms.length-1, "room!")
+        }, 200);*/
     })
 
     socket.on ('disconnect', function (data) {

@@ -31,13 +31,20 @@ body {
     float: left;
 }
 
-#disconnect {
+#disconnect, #go_to_register {
     margin: 5px;
     position: relative;
     float: right;
 }
+#go_to_login, #register_submit {
+    margin: 5px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%)
 
-#status {
+}
+
+#status, #register_status {
     padding-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 50px;
@@ -80,21 +87,98 @@ body {
     border: none;
     padding: 10px;
 }
+#rooms_page {
+    display: flex;
+}
+#rooms_display {
+    padding: 3px;
+    left: 5%;
+    position: relative;
+    display: block;
+    width: 30%;
+    background-color: rgb(192, 192, 192);
+}
+#rooms_creation {
+    padding: 3px;
+    right: 5%;
+    left: auto;
+    position: absolute;
+    display: block;
+    width: 30%;
+    background-color: rgb(192, 192, 192);
+    text-align: center;
+}
 
-#messages {
+#rooms {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: block;
 }
 
-#messages li {
+#rooms li {
     padding: 5px 10px;
+    width: 90%;
+    margin-bottom: 5px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    background-color: rgb(230, 230, 223);
+    display: block;
+}
+/*#rooms li:nth-child(odd) {
+}*/
+
+#rooms li:hover {
+    background-color: rgb(255, 255, 255);
 }
 
-#messages li:nth-child(odd) {
-    background: #eee;
+#rooms_title {
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 200%;
+    margin-bottom: 5px;
 }
 
 #canvas {
     background-color: darkcyan;
 }
+
+
+
+@import "compass/css3";
+
+@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
+
+
+body{
+  background: black;
+}
+
+.info {
+  color: white;
+  font:1em/1 sans-serif;
+  text-align: center;
+}
+
+.info a{
+  color: white;
+}
+
+svg{
+    display: block;
+    width: 100%;
+    position: relative;
+    overflow: hidden; 
+    margin: 0 auto;
+    background: black;
+    text-anchor: center;    
+}
+
+svg text {
+    filter: url(#filter);
+    fill: white;
+    font-family: 'Share Tech Mono', sans-serif;
+    font-size: 400%;
+}
+  
