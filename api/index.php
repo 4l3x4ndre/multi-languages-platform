@@ -26,17 +26,11 @@ $mysqli = mysqli_connect("localhost", "alexandre", "thor", "labase");
 
 // On recherche un user avec un login & pw reçus dans l'input
 $sql_name= "SELECT * FROM users WHERE login = '".$decoded['name']."' AND pw = '".$decoded['pw']."';";
-$row = $mysqli->query($sql_name);
-$users = $row->fetch_all();
-
-// j'ai un user {alex, alex} & {alexandre, alexandre} dans ma database
+$result = $mysqli->query($sql_name);
 
 // en fonction du result de la requête mySql, on renvoit:
-if (sizeof($users) >= 1) {
+if ($result->num_rows === 1) {
     echo '{"result": "got user"}';
 } else {
     echo '{"result": "none"}';
 }
-//error_log('************');
-///error_log($content);
-//echo (json_encode($decoded));

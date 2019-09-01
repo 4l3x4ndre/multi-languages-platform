@@ -11,11 +11,11 @@ const PORT = process.env.PORT || 9000
 
 const clients = []
 
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static(path.join(__dirname, 'game_js')))
+app.use(express.static(path.join(__dirname, '/../front/public')))
+app.use(express.static(path.join(__dirname, '/../front/game_js')))
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(path.resolve(__dirname + '/../front/index.html'))
 })
 
 
@@ -109,7 +109,7 @@ async function verifyUser(token) {
         // user a renvoyer
         let user = {name: '', pw: ''}
 
-        fetch('http://test.lan/authentication/PHP/index.php',
+        fetch('http://test.lan/api/index.php',
         {
             headers: {
                 'Accept': 'application/json',
